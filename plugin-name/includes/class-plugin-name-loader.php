@@ -1,16 +1,6 @@
 <?php
 
 /**
- * Register all actions and filters for the plugin
- *
- * @link       http://example.com
- * @since      1.0.0
- *
- * @package    Plugin_Name
- * @subpackage Plugin_Name/includes
- */
-
-/**
  * Register all actions and filters for the plugin.
  *
  * Maintain a list of all hooks that are registered throughout
@@ -66,9 +56,9 @@ class Plugin_Name_Loader {
 	 */
 	private function __construct() {
 
-		$this->actions    = array();
-		$this->filters    = array();
-		$this->shortcodes = array();
+		$this->actions    = [];
+		$this->filters    = [];
+		$this->shortcodes = [];
 
 	}
 
@@ -83,7 +73,7 @@ class Plugin_Name_Loader {
 	 *
 	 * @since    1.0.0
 	 */
-	public function add_action( $hook, $component, $callback, $priority = 10, $accepted_args = 1 ): void {
+	public function add_action( string $hook, object $component, string $callback, int $priority = 10, int $accepted_args = 1 ): void {
 		$this->actions = $this->add( $this->actions, $hook, $component, $callback, $priority, $accepted_args );
 	}
 
@@ -98,7 +88,7 @@ class Plugin_Name_Loader {
 	 *
 	 * @since    1.0.0
 	 */
-	public function add_filter( $hook, $component, $callback, $priority = 10, $accepted_args = 1 ): void {
+	public function add_filter( string $hook, object $component, string $callback, int $priority = 10, int $accepted_args = 1 ): void {
 		$this->filters = $this->add( $this->filters, $hook, $component, $callback, $priority, $accepted_args );
 	}
 
@@ -111,7 +101,7 @@ class Plugin_Name_Loader {
 	 *
 	 * @since     1.0.0
 	 */
-	public function add_shortcode( $tag, $component, $callback, $priority = 10, $accepted_args = 1 ): void {
+	public function add_shortcode( string $tag, object $component, string $callback, $priority = 10, $accepted_args = 1 ): void {
 		$this->shortcodes = $this->add( $this->shortcodes, $tag, $component, $callback, $priority, $accepted_args );
 	}
 
@@ -130,14 +120,14 @@ class Plugin_Name_Loader {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function add( $hooks, $hook, $component, $callback, $priority, $accepted_args ): array {
-		$hooks[ $this->hook_index( $hook, $component, $callback ) ] = array(
+	private function add( array $hooks, string $hook, object $component, string $callback, int $priority, int $accepted_args ): array {
+		$hooks[ $this->hook_index( $hook, $component, $callback ) ] = [
 			'hook'          => $hook,
 			'component'     => $component,
 			'callback'      => $callback,
 			'priority'      => $priority,
 			'accepted_args' => $accepted_args
-		);
+		];
 
 		return $hooks;
 
@@ -156,7 +146,7 @@ class Plugin_Name_Loader {
 	 *
 	 * @since      1.0.0
 	 */
-	public function remove( $hook, $component, $callback ): void {
+	public function remove( string $hook, object $component, string $callback ): void {
 		$index = $this->hook_index( $hook, $component, $callback );
 		if ( isset( $this->filters[ $index ] ) ) {
 			remove_filter( $this->filters[ $index ]['hook'],
@@ -180,7 +170,7 @@ class Plugin_Name_Loader {
 	 * @since       1.0.0
 	 * @access      protected
 	 */
-	protected function hook_index( $hook, $component, $callback ): string {
+	protected function hook_index( string $hook, object $component, string $callback ): string {
 		return md5( $hook . get_class( $component ) . $callback );
 	}
 
@@ -190,7 +180,7 @@ class Plugin_Name_Loader {
 	 *
 	 * @since    1.0.0
 	 */
-	public function run() {
+	public function run(): void {
 
 		foreach ( $this->filters as $hook ) {
 			add_filter( $hook['hook'], array( $hook['component'], $hook['callback'] ), $hook['priority'],

@@ -1,16 +1,6 @@
 <?php
 
 /**
- * Fired during plugin activation
- *
- * @link       http://example.com
- * @since      1.0.0
- *
- * @package    Plugin_Name
- * @subpackage Plugin_Name/includes
- */
-
-/**
  * Fired during plugin activation.
  *
  * This class defines all code necessary to run during the plugin's activation.
@@ -29,7 +19,7 @@ class Plugin_Name_Activator {
 	 *
 	 * @since    1.0.0
 	 */
-	public static function activate() {
+	public static function activate(): void {
 		// schedule events (cron jobs)
 		require_once plugin_dir_path( __FILE__ ) . 'class-plugin-name-cron.php';
 		Plugin_Name_Cron::schedule();

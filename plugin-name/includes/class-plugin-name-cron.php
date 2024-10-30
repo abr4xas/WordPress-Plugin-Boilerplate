@@ -21,12 +21,12 @@
  */
 class Plugin_Name_Cron {
 
-	const PLUGIN_NAME_EVENT_DAILY_HOOK = 'plugin_name_event_daily';
+	const string PLUGIN_NAME_EVENT_DAILY_HOOK = 'plugin_name_event_daily';
 
 	/**
 	 * Check if already scheduled, and schedule if not.
 	 */
-	public static function schedule() {
+	public static function schedule(): void {
 		if ( ! self::next_scheduled_daily() ) {
 			self::daily_schedule();
 		}
@@ -35,21 +35,21 @@ class Plugin_Name_Cron {
 	/**
 	 * Unschedule.
 	 */
-	public static function unschedule() {
+	public static function unschedule(): void {
 		wp_clear_scheduled_hook( self::PLUGIN_NAME_EVENT_DAILY_HOOK );
 	}
 
 	/**
 	 * @return false|int Returns false if not scheduled, or timestamp of next run.
 	 */
-	private static function next_scheduled_daily() {
+	private static function next_scheduled_daily(): false|int {
 		return wp_next_scheduled( self::PLUGIN_NAME_EVENT_DAILY_HOOK );
 	}
 
 	/**
 	 * Create new schedule.
 	 */
-	private static function daily_schedule() {
+	private static function daily_schedule(): void {
 		wp_schedule_event( time(), 'daily', self::PLUGIN_NAME_EVENT_DAILY_HOOK );
 	}
 }

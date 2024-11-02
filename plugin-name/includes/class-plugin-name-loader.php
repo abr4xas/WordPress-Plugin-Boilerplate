@@ -41,12 +41,11 @@ class Plugin_Name_Loader {
 	protected array $shortcodes;
 
 	/**
-	 *
 	 * @since 1.0.0
 	 * @access private
-	 * @var Plugin_Name_Loader
+	 * @var Plugin_Name_Loader|null
 	 */
-	private static Plugin_Name_Loader $instance;
+	private static ?Plugin_Name_Loader $instance = null;
 
 	/**
 	 * Initialize the collections used to maintain the actions and filters.
@@ -73,7 +72,13 @@ class Plugin_Name_Loader {
 	 *
 	 * @since    1.0.0
 	 */
-	public function add_action( string $hook, object $component, string $callback, int $priority = 10, int $accepted_args = 1 ): void {
+	public function add_action(
+		string $hook,
+		object $component,
+		string $callback,
+		int $priority = 10,
+		int $accepted_args = 1
+	): void {
 		$this->actions = $this->add( $this->actions, $hook, $component, $callback, $priority, $accepted_args );
 	}
 
@@ -88,7 +93,13 @@ class Plugin_Name_Loader {
 	 *
 	 * @since    1.0.0
 	 */
-	public function add_filter( string $hook, object $component, string $callback, int $priority = 10, int $accepted_args = 1 ): void {
+	public function add_filter(
+		string $hook,
+		object $component,
+		string $callback,
+		int $priority = 10,
+		int $accepted_args = 1
+	): void {
 		$this->filters = $this->add( $this->filters, $hook, $component, $callback, $priority, $accepted_args );
 	}
 
@@ -101,7 +112,13 @@ class Plugin_Name_Loader {
 	 *
 	 * @since     1.0.0
 	 */
-	public function add_shortcode( string $tag, object $component, string $callback, $priority = 10, $accepted_args = 1 ): void {
+	public function add_shortcode(
+		string $tag,
+		object $component,
+		string $callback,
+		$priority = 10,
+		$accepted_args = 1
+	): void {
 		$this->shortcodes = $this->add( $this->shortcodes, $tag, $component, $callback, $priority, $accepted_args );
 	}
 
@@ -120,7 +137,14 @@ class Plugin_Name_Loader {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function add( array $hooks, string $hook, object $component, string $callback, int $priority, int $accepted_args ): array {
+	private function add(
+		array $hooks,
+		string $hook,
+		object $component,
+		string $callback,
+		int $priority,
+		int $accepted_args
+	): array {
 		$hooks[ $this->hook_index( $hook, $component, $callback ) ] = [
 			'hook'          => $hook,
 			'component'     => $component,
@@ -130,7 +154,6 @@ class Plugin_Name_Loader {
 		];
 
 		return $hooks;
-
 	}
 
 	/**
@@ -148,14 +171,19 @@ class Plugin_Name_Loader {
 	 */
 	public function remove( string $hook, object $component, string $callback ): void {
 		$index = $this->hook_index( $hook, $component, $callback );
+
 		if ( isset( $this->filters[ $index ] ) ) {
-			remove_filter( $this->filters[ $index ]['hook'],
-				array( $this->filters[ $index ]['component'], $this->filters[ $index ]['callback'] ) );
+			remove_filter(
+				$this->filters[ $index ]['hook'],
+				array( $this->filters[ $index ]['component'], $this->filters[ $index ]['callback'] )
+			);
 		}
 
 		if ( isset( $this->actions[ $index ] ) ) {
-			remove_action( $this->filters[ $index ]['hook'],
-				array( $this->filters[ $index ]['component'], $this->filters[ $index ]['callback'] ) );
+			remove_action(
+				$this->filters[ $index ]['hook'],
+				array( $this->filters[ $index ]['component'], $this->filters[ $index ]['callback'] )
+			);
 		}
 	}
 
@@ -183,19 +211,29 @@ class Plugin_Name_Loader {
 	public function run(): void {
 
 		foreach ( $this->filters as $hook ) {
-			add_filter( $hook['hook'], array( $hook['component'], $hook['callback'] ), $hook['priority'],
-				$hook['accepted_args'] );
+			add_filter(
+				$hook['hook'],
+				array( $hook['component'], $hook['callback'] ),
+				$hook['priority'],
+				$hook['accepted_args']
+			);
 		}
 
 		foreach ( $this->actions as $hook ) {
-			add_action( $hook['hook'], array( $hook['component'], $hook['callback'] ), $hook['priority'],
-				$hook['accepted_args'] );
+			add_action(
+				$hook['hook'],
+				array( $hook['component'], $hook['callback'] ),
+				$hook['priority'],
+				$hook['accepted_args']
+			);
 		}
 
 		foreach ( $this->shortcodes as $hook ) {
-			add_shortcode( $hook['hook'], array( $hook['component'], $hook['callback'] ) );
+			add_shortcode(
+				$hook['hook'],
+				array( $hook['component'], $hook['callback'] )
+			);
 		}
-
 	}
 
 	/**
@@ -205,12 +243,7 @@ class Plugin_Name_Loader {
 	 * @since 1.0.0
 	 */
 	public static function get_instance(): Plugin_Name_Loader {
-		if ( is_null( self::$instance ) ) {
-			self::$instance = new Plugin_Name_Loader();
-		}
-
-		return self::$instance;
-
+		return self::$instance ??= new Plugin_Name_Loader();
 	}
 
 }

@@ -54,11 +54,8 @@ class Plugin_Name {
 	 * @since    1.0.0
 	 */
 	public function __construct() {
-		if ( defined( 'PLUGIN_NAME_VERSION' ) ) {
-			$this->version = PLUGIN_NAME_VERSION;
-		} else {
-			$this->version = '1.0.0';
-		}
+		$this->version = constant('PLUGIN_NAME_VERSION') ?? '1.0.0';
+
 		$this->plugin_name = 'plugin-name';
 
 		$this->load_dependencies();
@@ -111,14 +108,14 @@ class Plugin_Name {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-plugin-name-public.php';
 
 		/**
-		 * Get loader using its singleton
-		 */
-		$this->loader = Plugin_Name_Loader::get_instance();
-
-		/**
 		 * The class responsible for scheduling and un-scheduling events (cron jobs).
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-plugin-name-cron.php';
+
+		/**
+		 * Get loader using its singleton
+		 */
+		$this->loader = Plugin_Name_Loader::get_instance();
 	}
 
 	/**
@@ -228,5 +225,4 @@ class Plugin_Name {
 	public function get_version(): string {
 		return $this->version;
 	}
-
 }

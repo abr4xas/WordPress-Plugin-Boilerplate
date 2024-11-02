@@ -42,7 +42,6 @@ class Plugin_Name_Admin {
 
 		$this->plugin_name = $plugin_name;
 		$this->version     = $version;
-
 	}
 
 	/**
@@ -64,7 +63,6 @@ class Plugin_Name_Admin {
 			[],
 			$this->version,
 		);
-
 	}
 
 	/**
@@ -97,4 +95,5 @@ class Plugin_Name_Admin {
 
 		// do something every day
 	}
+
 }
